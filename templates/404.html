@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block title %}Not found · Aurum{% endblock %}{% block content %}<div class="empty-page">
+    <span class="eyebrow">404</span>
+    <h1>That page has moved.</h1>
+    <p>Return to the workspace and pick up where you left off.</p><a class="primary-btn"
+        href="{{ url_for('dashboard') }}">Back to overview</a>
+</div>{% endblock %}

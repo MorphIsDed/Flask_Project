@@ -1,0 +1,85 @@
+{% extends 'base.html' %}{% block title %}Overview · Aurum{% endblock %}{% block content %}<div class="page-heading">
+    <div><span class="eyebrow">Wednesday, 16 September 2026</span>
+        <h1>Good morning, Admin.</h1>
+        <p>Here is what is happening across your store today.</p>
+    </div><a href="{{ url_for('customers') }}" class="primary-btn">+ New customer</a>
+</div>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-top"><span>Customers</span><span class="stat-icon gold">♧</span></div><strong>{{ customers
+            }}</strong><small class="positive">↑ 12.4% <i>vs last month</i></small>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><span>Active pipeline</span><span class="stat-icon blue">◌</span></div><strong>{{ leads
+            }}</strong><small class="positive">↑ 8.1% <i>vs last month</i></small>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><span>Pieces in stock</span><span class="stat-icon rose">◇</span></div><strong>{{ products
+            }}</strong><small class="muted">{{ low_stock|length }} need attention</small>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><span>Team members</span><span class="stat-icon green">♙</span></div><strong>{{ employees
+            }}</strong><small class="muted">All active today</small>
+    </div>
+</div>
+<div class="content-grid">
+    <div class="panel chart-panel">
+        <div class="panel-head">
+            <div>
+                <h2>Revenue overview</h2>
+                <p>Sales performance in INR</p>
+            </div><select>
+                <option>Last 30 days</option>
+                <option>Last 90 days</option>
+            </select>
+        </div>
+        <div class="chart">
+            <div class="chart-y"><span>₹4L</span><span>₹3L</span><span>₹2L</span><span>₹1L</span><span>₹0</span></div>
+            <div class="chart-area">
+                <div class="grid-lines"></div><svg viewBox="0 0 620 230" preserveAspectRatio="none">
+                    <path
+                        d="M0,180 C48,165 58,150 94,160 S142,105 180,125 S230,90 268,115 S315,150 350,108 S395,92 430,105 S478,42 520,70 S575,52 620,25 L620,230 L0,230Z"
+                        fill="rgba(189,143,68,.12)" />
+                    <path
+                        d="M0,180 C48,165 58,150 94,160 S142,105 180,125 S230,90 268,115 S315,150 350,108 S395,92 430,105 S478,42 520,70 S575,52 620,25"
+                        fill="none" stroke="#b78945" stroke-width="3" />
+                </svg>
+                <div class="chart-labels"><span>Aug 18</span><span>Aug 25</span><span>Sep 01</span><span>Sep
+                        08</span><span>Sep 15</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Low stock</h2>
+                <p>Items below reorder level</p>
+            </div><a href="{{ url_for('inventory') }}" class="text-link">View all →</a>
+        </div>
+        <div class="mini-list">{% for product in low_stock %}<div class="mini-item">
+                <div class="product-thumb">◇</div>
+                <div><b>{{ product.name }}</b><small>{{ product.sku }} · {{ product.purity }}</small></div><span
+                    class="stock-badge">{{ product.stock_qty }} left</span>
+            </div>{% else %}<div class="empty">Stock levels look healthy.</div>{% endfor %}</div>
+    </div>
+</div>
+<div class="content-grid lower">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Pipeline snapshot</h2>
+                <p>Your highest-value opportunities</p>
+            </div><a href="{{ url_for('leads') }}" class="text-link">Open pipeline →</a>
+        </div>
+        <div class="pipeline-bars">
+            <div><span>New <b>25%</b></span><i style="width:25%"></i></div>
+            <div><span>Qualified <b>55%</b></span><i style="width:55%"></i></div>
+            <div><span>Proposal <b>72%</b></span><i style="width:72%"></i></div>
+        </div>
+    </div>
+    <div class="panel morning-card"><span class="eyebrow">Today's focus</span>
+        <h2>Build relationships,<br>not just transactions.</h2>
+        <p>There are 3 follow-ups due today. Your clients are waiting.</p><a href="{{ url_for('leads') }}"
+            class="text-link">View follow-ups →</a>
+    </div>
+</div>{% endblock %}

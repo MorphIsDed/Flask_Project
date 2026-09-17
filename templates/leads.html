@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% block title %}Sales Pipeline · Aurum{% endblock %}{% block crumb %}Sales pipeline{% endblock
+%}{% block content %}<div class="page-heading">
+    <div><span class="eyebrow">Clienteling</span>
+        <h1>Sales pipeline</h1>
+        <p>Turn conversations into meaningful relationships.</p>
+    </div><button class="primary-btn" onclick="document.getElementById('lead-form').classList.toggle('hidden')">+ Add
+        lead</button>
+</div>
+<div id="lead-form" class="panel form-panel hidden">
+    <form method="post" class="form-grid"><label>Lead name<input name="name" required></label><label>Phone number<input
+                name="phone" required></label><label>Source<select name="source">
+                <option>Walk-in</option>
+                <option>Instagram</option>
+                <option>Referral</option>
+                <option>Website</option>
+            </select></label><label>Stage<select name="stage">
+                <option>New</option>
+                <option>Qualified</option>
+                <option>Proposal</option>
+                <option>Won</option>
+            </select></label><label>Estimated value (₹)<input type="number" name="value"></label><label>Notes<input
+                name="notes"></label><button class="primary-btn" type="submit">Save lead</button></form>
+</div>
+<div class="kanban">{% for stage in ['New', 'Qualified', 'Proposal'] %}<div class="kanban-column">
+        <div class="kanban-title"><span>{{ stage }}</span><b>{{ leads|selectattr('stage', 'equalto', stage)|list|length
+                }}</b></div>{% for lead in leads if lead.stage == stage %}<div class="lead-card">
+            <div class="lead-head"><span class="avatar small">{{ lead.name[:2].upper() }}</span><span
+                    class="kebab">•••</span></div>
+            <h3>{{ lead.name }}</h3><small>{{ lead.source }} · {{ lead.phone }}</small>
+            <div class="lead-foot"><b>₹{{ '{:,.0f}'.format(lead.value or 0) }}</b><span>Next step →</span></div>
+        </div>{% else %}<div class="empty">No leads in this stage.</div>{% endfor %}
+    </div>{% endfor %}</div>{% endblock %}

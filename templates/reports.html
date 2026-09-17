@@ -1,0 +1,38 @@
+{% extends 'base.html' %}{% block title %}Reports · Aurum{% endblock %}{% block crumb %}Reports{% endblock %}{% block
+content %}<div class="page-heading">
+    <div><span class="eyebrow">Business intelligence</span>
+        <h1>Reports</h1>
+        <p>A clear view of the numbers behind your decisions.</p>
+    </div><button class="secondary-btn">Download report ↓</button>
+</div>
+<div class="stats-grid report-stats">
+    <div class="stat-card"><span>Total sales</span><strong>₹{{ '{:,.0f}'.format(sales_total or 0) }}</strong><small
+            class="muted">Recorded invoices</small></div>
+    <div class="stat-card"><span>Open pipeline</span><strong>₹{{ '{:,.0f}'.format(pipeline or 0) }}</strong><small
+            class="muted">Estimated opportunity value</small></div>
+    <div class="stat-card"><span>Inventory value</span><strong>₹{{ '{:,.0f}'.format(inventory_value or 0)
+            }}</strong><small class="muted">Current retail value</small></div>
+</div>
+<div class="content-grid">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Sales trend</h2>
+                <p>Latest invoices, in INR</p>
+            </div>
+        </div><canvas id="sales-chart" height="140"></canvas>
+    </div>
+    <div class="panel report-card"><span class="eyebrow">Available reports</span>
+        <h2>Know your store deeper.</h2>
+        <div class="report-links"><a href="#">Sales by category <span>→</span></a><a href="#">GST collection summary
+                <span>→</span></a><a href="#">Customer lifetime value <span>→</span></a><a href="#">Employee incentives
+                <span>→</span></a></div>
+    </div>
+    <div class="panel report-card dark-report"><span class="eyebrow">India-ready</span>
+        <h2>Built around your books.</h2>
+        <p>Track GST, INR pricing, purity, weight, incentives, and payments in one connected workspace.</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>new Chart(document.getElementById('sales-chart'), { type: 'line', data: { labels: {{ sales_series| map(attribute = 'label') | list | tojson }}, datasets: [{ label: 'Revenue', data: {{ sales_series| map(attribute = 'value') | list | tojson }}, borderColor: '#b78945', backgroundColor: 'rgba(183,137,69,.12)', fill: true, tension: .35}]}, options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }});</script>
+{% endblock %}
