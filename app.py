@@ -168,6 +168,8 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-key-change-me")
     database_uri = os.getenv("DATABASE_URL", "sqlite:///jewellery_crm.db")
+    if database_uri.startswith("postgres://"):
+        database_uri = "postgresql://" + database_uri[len("postgres://"):]
     try:
         probe_engine = create_engine(database_uri, pool_pre_ping=True)
         with probe_engine.connect():

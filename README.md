@@ -14,6 +14,10 @@ python app.py
 
 Open `http://127.0.0.1:5000` and sign in with `admin@aurum.local` / `admin123`.
 
+## Deploy to Vercel
+
+Import this repository into Vercel with the Python runtime detected automatically. Add `SECRET_KEY`, `DATABASE_URL`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` as Vercel environment variables. Use a hosted PostgreSQL database for production because Vercel's filesystem is ephemeral; without a reachable database, the app starts with temporary demo data.
+
 ## Included defaults
 
 - INR pricing and India-oriented jewellery fields: metal, purity, gross weight, stone weight, SKU and reorder level.
