@@ -1,6 +1,7 @@
 import os
 import io
 import json
+import logging
 from functools import wraps
 from datetime import datetime
 from decimal import Decimal
@@ -9,6 +10,7 @@ from dotenv import load_dotenv
 from flask import Flask, flash, redirect, render_template, request, url_for, send_file, jsonify
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
 from werkzeug.security import check_password_hash, generate_password_hash
 
 load_dotenv()
@@ -16,6 +18,7 @@ load_dotenv()
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = "login"
+logger = logging.getLogger(__name__)
 
 
 class User(UserMixin, db.Model):
@@ -164,7 +167,17 @@ class Repair(db.Model):
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-key-change-me")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///jewellery_crm.db")
+    database_uri = os.getenv("DATABASE_URL", "sqlite:///jewellery_crm.db")
+    try:
+        probe_engine = create_engine(database_uri, pool_pre_ping=True)
+        with probe_engine.connect():
+            pass
+        probe_engine.dispose()
+    except Exception as error:
+        logger.warning("Database unavailable (%s); using temporary fallback data.", error)
+        database_uri = "sqlite:///:memory:"
+        app.config["DB_FALLBACK_ACTIVE"] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
     login_manager.init_app(app)

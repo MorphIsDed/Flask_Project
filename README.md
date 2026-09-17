@@ -20,6 +20,7 @@ Open `http://127.0.0.1:5000` and sign in with `admin@aurum.local` / `admin123`.
 - SQLite database stored in the Flask instance database by default.
 - Configuration through `.env`, including `DATABASE_URL`, so PostgreSQL can be used later without changing the application routes.
 - Seed data is inserted only into an empty database.
+- If the configured database cannot be reached at startup, the app uses a temporary in-memory SQLite database with the demo seed data so the UI remains available.
 
 ## Included workflows
 
